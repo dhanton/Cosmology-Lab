@@ -1,4 +1,4 @@
-#!/dev/python3
+#!/usr/bin/env python
 
 import numpy as np
 from scipy.integrate import quad
@@ -15,16 +15,15 @@ def dl(z, omega_m, w):
         
     return (1 + z) * quad(lambda y: g(y), 0, z)[0]
 
-#Ejercicio 1
+#Exercise 1
 vectorized_dl = np.vectorize(dl)
 
-#Ejercicio 2
+#Exercise 2
 z = np.arange(0, 1.5, 0.1)
 plot_result = vectorized_dl(z, 0.3, -1)
 
 plt.figure()
 plt.plot(z, plot_result)
-#plt.title("Ejercicio 2",fontsize = 15)
 plt.xlabel("$z$",fontsize = 15)
 plt.ylabel("$d_L$",fontsize = 15, rotation=0)
 plt.savefig("ejercicio_2.png")
@@ -32,7 +31,7 @@ plt.show()
 
 print("d_L(0.5, 0.3. -1)", dl(0.5, 0.3, -1))
 
-#Ejercicio 3
+#Exercise 3
 def marginalized_M(z, omega_m, w, data_mu, data_error):
     return np.sum((data_mu - 5 * np.log10(vectorized_dl(z, omega_m, w)))/data_error**2)/np.sum(1/data_error**2)
 
@@ -41,7 +40,7 @@ z, = data['z']
 m, = data['m']
 dm, = data['dm']
 
-#Ejercicio 4
+#Exercise 4
 def model_mu(z, omega_m, w, M):
     return 5 * np.log10(vectorized_dl(z, omega_m, w)) + M
 
@@ -53,7 +52,7 @@ def marginalized_chi(omega_m, w):
 
 print("Marginalized Chi for (0.3, -1)", marginalized_chi(0.3, -1))
 
-#Ejercicio 5
+#Exercise 5
 min_result = minimize(marginalized_chi, 0.25, args=(-1,))
 
 best_omega = min_result.x
@@ -62,7 +61,7 @@ best_chi = min_result.fun
 print("Best Omega", best_omega)
 print("Best Chi", best_chi)
 
-#Ejercicio 6
+#Exercise 6
 def error_fun(omega_m, w):
     return np.abs(marginalized_chi(omega_m, w) - best_chi - 1)
 
@@ -75,7 +74,7 @@ right_distance = best_omega - right_omega
 print("Left error", left_distance)
 print("Rigth error", right_distance)
 
-#Ejercicio 7
+#Exercise 7
 einstein_desitter_chi = marginalized_chi(1, -1)
 print("Einstein-de Sitter Chi", einstein_desitter_chi)
 
@@ -95,7 +94,7 @@ plt.show()
 
 print("Delta of Chi(Einstein-de Sitter) and Best Chi", np.sqrt(einstein_desitter_chi - best_chi))
 
-#Ejercicio 8
+#Exercise 8
 supernova_distance = 4285 * dl(1, best_omega, -1)
 print("Supernova distance", supernova_distance)
 
@@ -107,7 +106,7 @@ def comoving_distance(z):
 
 print("Comoving distance", comoving_distance(1))
 
-#Ejercicio 9
+#Exercise 9
 initial_time = time.time()
 
 N = 100
